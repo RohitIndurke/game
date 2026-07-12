@@ -152,6 +152,9 @@ export class AudioManager {
     for (const [key, path] of Object.entries(sources)) {
       try {
         const response = await fetch(path);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch sound: ${response.status} ${response.statusText}`);
+        }
         const arrayBuffer = await response.arrayBuffer();
         if (!this.ctx) return;
         const audioBuffer = await this.ctx.decodeAudioData(arrayBuffer);
